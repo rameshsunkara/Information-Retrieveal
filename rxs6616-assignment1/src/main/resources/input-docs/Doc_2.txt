@@ -1,0 +1,1 @@
+Information filtering has the reverse concept of Information Retrieval where Information need is static but content base is dynamic.
