@@ -15,11 +15,11 @@ public class Main {
 		if(!xConfigurator.loadConfigValues(xPropertiesFilePath))
 			return;
 		
-		TermDocumentMatrixConstructor xMatrixConstructor = new TermDocumentMatrixConstructor(xConfigurator);
-		xMatrixConstructor.constructMatrix();
+		//TermDocumentMatrixConstructor xMatrixConstructor = new TermDocumentMatrixConstructor(xConfigurator);
+		//xMatrixConstructor.constructMatrix();
 		
-		//InvertedIndexConstructor xInvertedIndexConstructor = new InvertedIndexConstructor(xConfigurator);
-		//xInvertedIndexConstructor.constructInvertedIndex();
+		InvertedIndexConstructor xInvertedIndexConstructor = new InvertedIndexConstructor(xConfigurator);
+		xInvertedIndexConstructor.constructInvertedIndex();
 	}
 
 }

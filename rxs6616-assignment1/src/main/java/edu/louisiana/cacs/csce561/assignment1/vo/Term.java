@@ -1,8 +1,8 @@
 package edu.louisiana.cacs.csce561.assignment1.vo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author rsunkara
@@ -12,9 +12,11 @@ public class Term {
 
 	private String name;
 	
-	private List<String> documentList;
+	private Set<String> documentList;
 	
 	private int[] incidenceMatrixValues = null;
+	
+	private int frequency;
 
 	public String getName() {
 		return name;
@@ -24,13 +26,13 @@ public class Term {
 		this.name = name;
 	}
 
-	public List<String> getDocumentList() {
+	public Set<String> getDocumentList() {
 		if(documentList==null)
-			documentList = new ArrayList<String>();
+			documentList = new LinkedHashSet<String>();
 		return documentList;
 	}
 
-	public void setDocumentList(List<String> documentList) {
+	public void setDocumentList(Set<String> documentList) {
 		this.documentList = documentList;
 	}
 
@@ -44,6 +46,14 @@ public class Term {
 	
 	public void setIndice(int index,int value){
 		this.incidenceMatrixValues[index] = value;
+	}
+		
+	public int getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(int frequency) {
+		this.frequency = frequency;
 	}
 
 	@Override
