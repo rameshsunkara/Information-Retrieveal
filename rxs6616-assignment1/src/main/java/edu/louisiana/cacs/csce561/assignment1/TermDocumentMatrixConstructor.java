@@ -5,10 +5,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -102,7 +106,32 @@ public class TermDocumentMatrixConstructor {
 	}
 
 	private void postProcess() {
-		System.out.println(m_TermList);
-		System.out.println(m_TermList.size());
+		m_logger.trace("Total no.of terms:"+m_TermList.size());
+		PrintWriter xFileWriter = null;
+		try {
+			String outputfile = m_configurator.get_term_document_file_path();
+			xFileWriter = new PrintWriter(new File(outputfile));
+			xFileWriter.print("\t\t\t");
+			for(int i=0;i<m_DocFiles.length;i++){
+				xFileWriter.format("\t %10s ",m_DocFiles[i].getName());
+			}
+			xFileWriter.println();
+			Set<Entry<String, Term>> termSet = m_TermList.entrySet();
+			Iterator<Entry<String, Term>> itr = termSet.iterator();
+			while(itr.hasNext()){
+				Entry<String, Term> tt=itr.next();
+				Term t = tt.getValue();
+				xFileWriter.format("%15s",t.getName());
+				for(int j=0;j<t.getIncidenceMatrixValues().length;j++){
+					xFileWriter.format("\t %10d",t.getIncidenceMatrixValues()[j]);
+				}
+				xFileWriter.println("");
+			}		
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+			xFileWriter.flush();
+			xFileWriter.close();
+		}	
 	}
 }

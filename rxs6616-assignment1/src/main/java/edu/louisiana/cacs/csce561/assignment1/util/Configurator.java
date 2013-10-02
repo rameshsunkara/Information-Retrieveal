@@ -38,11 +38,25 @@ public class Configurator {
 				+ m_configFile.getProperty("DOC_INPUT_DIR");
 	}
 	
+	public String get_output_dir() {
+		return get_resources_dir() + File.separator
+				+ m_configFile.getProperty("OUTPUT_DIR");
+	}	
 	
 	public String get_stopword_file_path(){
 		return get_resources_dir() + File.separator
 				+ m_configFile.getProperty("STOP_WORDS_FILE");
 	}
+	
+	public String get_term_document_file_path(){
+		return get_output_dir() + File.separator
+				+ m_configFile.getProperty("TERM_DOCUMENT_MATRIX_FILE");
+	}
+	
+	public String get_inverted_index_file_path(){
+		return get_output_dir() + File.separator
+				+ m_configFile.getProperty("INVERTED_INDEX_FILE");
+	}	
 
 	public static void main(String[] args) {
 		Configurator c = new Configurator();

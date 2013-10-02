@@ -17,6 +17,9 @@ public class Main {
 		
 		TermDocumentMatrixConstructor xMatrixConstructor = new TermDocumentMatrixConstructor(xConfigurator);
 		xMatrixConstructor.constructMatrix();
+		
+		//InvertedIndexConstructor xInvertedIndexConstructor = new InvertedIndexConstructor(xConfigurator);
+		//xInvertedIndexConstructor.constructInvertedIndex();
 	}
 
 }

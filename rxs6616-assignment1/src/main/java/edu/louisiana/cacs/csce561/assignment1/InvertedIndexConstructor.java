@@ -48,7 +48,9 @@ public class InvertedIndexConstructor {
 		m_DocFiles = MyUtilities.getDocumentList(m_configurator
 				.get_document_input_dir());
 		m_StopWordList = loadStopWords();
+		m_logger.debug("Stop Words:"+m_StopWordList);
 		if (m_DocFiles.length > 0) {
+			m_DocumentList = new ArrayList<Document>();
 			m_TermList = new HashMap<String, Term>();			
 		}
 		m_logger.trace("Exit preProcess()");
@@ -58,15 +60,14 @@ public class InvertedIndexConstructor {
 		m_logger.trace("In loadStopWords()");
 		BufferedReader xStopWordReader = null;
 		String xCurrWord = null;
-		List<String> xStopWords = new ArrayList<String>();
+		m_StopWordList = new ArrayList<String>();
 		try{
 			xStopWordReader = new BufferedReader(new FileReader(m_configurator.get_stopword_file_path()));
-			xStopWords = new ArrayList<String>();
 			while ((xCurrWord = xStopWordReader.readLine()) != null) {
 				String[] parsedStrings = xCurrWord.split("[\\s\\n]");
 				for (String s : parsedStrings) {
 					s = s.toLowerCase();
-					xStopWords.add(s);
+					m_StopWordList.add(s);
 				}
 			}
 		}catch(FileNotFoundException e){
@@ -83,7 +84,7 @@ public class InvertedIndexConstructor {
 			}
 		}
 		m_logger.trace("Exit loadStopWords()");
-		return null;
+		return m_StopWordList;
 	}
 
 	public void process() {
