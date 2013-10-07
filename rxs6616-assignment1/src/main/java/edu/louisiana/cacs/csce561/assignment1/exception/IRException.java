@@ -8,6 +8,11 @@ package edu.louisiana.cacs.csce561.assignment1.exception;
  */
 public class IRException extends Exception{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public IRException(String message) {
         super(message);
     }
