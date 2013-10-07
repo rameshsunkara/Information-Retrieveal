@@ -6,6 +6,11 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Reads the given configuration file and acts as data renderer for other classes.
+ * @author rsunkara
+ *
+ */
 public class Configurator {
 
 	private static final Log m_logger = LogFactory.getLog(Configurator.class);
@@ -57,6 +62,10 @@ public class Configurator {
 		return get_output_dir() + File.separator
 				+ m_configFile.getProperty("INVERTED_INDEX_FILE");
 	}	
+	
+	public String get_regex_stop_words(){
+		return m_configFile.getProperty("REGEX_STOP_WORDS");
+	}
 
 	public static void main(String[] args) {
 		Configurator c = new Configurator();

@@ -1,10 +1,11 @@
-package edu.louisiana.cacs.csce561.assignment1.vo;
+package edu.louisiana.cacs.csce561.assignment1.model;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
+ * Model to represent the TERM and its properties
  * @author rsunkara
  *
  */

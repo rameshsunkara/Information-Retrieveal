@@ -17,24 +17,39 @@ import java.util.Map.Entry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.louisiana.cacs.csce561.assignment1.exception.IRException;
+import edu.louisiana.cacs.csce561.assignment1.model.Document;
+import edu.louisiana.cacs.csce561.assignment1.model.Term;
 import edu.louisiana.cacs.csce561.assignment1.util.Configurator;
 import edu.louisiana.cacs.csce561.assignment1.util.MyUtilities;
-import edu.louisiana.cacs.csce561.assignment1.vo.Document;
-import edu.louisiana.cacs.csce561.assignment1.vo.Term;
 
+/**
+ * <p>
+ * It constructs the inverted index and prints it to the configured 
+ * output file.
+ * </p>
+ * @author rsunkara
+ * @since October 2, 2013
+ *
+ */
 public class InvertedIndexConstructor {
 
 	private static Log m_logger = LogFactory
 			.getLog(InvertedIndexConstructor.class);
 
+	//Holds all the system properties
 	private Configurator m_configurator = null;
 
+	//List of documents supplied
 	private List<Document> m_DocumentList = null;
 
-	private Map<String, Term> m_TermList = null;
+	//Term Map
+	private Map<String, Term> m_TermMap = null;
 
+	//Represents input documents
 	private File[] m_DocFiles = null;
 	
+	//Stores stop words
 	private List<String> m_StopWordList = null;
 
 	public InvertedIndexConstructor(Configurator p_configurator) {
@@ -42,25 +57,40 @@ public class InvertedIndexConstructor {
 	}
 
 	public void constructInvertedIndex() {
-		preProcess();
-		process();
-		postProcess();
+		try {
+			preProcess();
+			process();
+			postProcess();
+		} catch (IRException e) {
+			m_logger.error(e.getMessage(),e);
+		}
+		
 	}
 
-	private void preProcess() {
+	/**
+	 * It fetches the list of input documents.
+	 * And also loads the stop words
+	 * @throws IRException 
+	 */
+	private void preProcess() throws IRException {
 		m_logger.trace("In preProcess()");
 		m_DocFiles = MyUtilities.getDocumentList(m_configurator
 				.get_document_input_dir());
-		m_StopWordList = loadStopWords();
+		m_StopWordList = loadStopWords("[\\s\\n]");
 		m_logger.debug("Stop Words:"+m_StopWordList);
 		if (m_DocFiles.length > 0) {
 			m_DocumentList = new ArrayList<Document>();
-			m_TermList = new HashMap<String, Term>();			
+			m_TermMap = new HashMap<String, Term>();			
 		}
 		m_logger.trace("Exit preProcess()");
 	}
 
-	private List<String> loadStopWords() {
+	/**
+	 * Reads the stop words
+	 * @return
+	 * @throws IRException
+	 */
+	private List<String> loadStopWords(String p_regex) throws IRException {
 		m_logger.trace("In loadStopWords()");
 		BufferedReader xStopWordReader = null;
 		String xCurrWord = null;
@@ -68,22 +98,25 @@ public class InvertedIndexConstructor {
 		try{
 			xStopWordReader = new BufferedReader(new FileReader(m_configurator.get_stopword_file_path()));
 			while ((xCurrWord = xStopWordReader.readLine()) != null) {
-				String[] parsedStrings = xCurrWord.split("[\\s\\n]");
+				String[] parsedStrings = xCurrWord.split(p_regex);
 				for (String s : parsedStrings) {
 					s = s.toLowerCase();
 					m_StopWordList.add(s);
 				}
 			}
 		}catch(FileNotFoundException e){
-			e.printStackTrace();
+			m_logger.error("Unable to find stop words file",e);
+			throw new IRException("Unable to find stop words file");
 		} catch (IOException e) {
-			e.printStackTrace();
+			m_logger.error("Unable to load stop words file",e);
+			throw new IRException("Unable to load stop words file");
 		}finally{
 			if(xStopWordReader!=null){
 				try {
 					xStopWordReader.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					m_logger.fatal("Memory leak",e);
+					throw new IRException("Memory Leak");
 				}
 			}
 		}
@@ -91,14 +124,26 @@ public class InvertedIndexConstructor {
 		return m_StopWordList;
 	}
 
-	public void process() {
+	/**
+	 * Parses each document found in the input directory
+	 * @throws IRException 
+	 */
+	public void process() throws IRException {
 		for (int xDocIndex = 0; xDocIndex < m_DocFiles.length; xDocIndex++) {
 			m_DocumentList.add(parseDocument(m_DocFiles[xDocIndex], xDocIndex,
 					m_DocFiles.length));
 		}
 	}
 	
-	private Document parseDocument(File xDocument, int p_DocIndex, int p_docSize) {
+	/**
+	 * Parses the document and finds the frequency of terms and its documents associated.
+	 * @param xDocument
+	 * @param p_DocIndex
+	 * @param p_docSize
+	 * @return
+	 * @throws IRException 
+	 */
+	private Document parseDocument(File xDocument, int p_DocIndex, int p_docSize) throws IRException {
 		Document xCurrentDoc = new Document();
 		xCurrentDoc.setName(xDocument.getName());
 		BufferedReader xCurrentDocReader = null;
@@ -115,8 +160,8 @@ public class InvertedIndexConstructor {
 					}
 					xTermList.add(s);
 					Term xCurrentTerm = null;
-					if (m_TermList.containsKey(s)) {
-						xCurrentTerm = m_TermList.get(s);
+					if (m_TermMap.containsKey(s)) {
+						xCurrentTerm = m_TermMap.get(s);
 					} else {
 						xCurrentTerm = new Term();
 						xCurrentTerm.setName(s);
@@ -127,30 +172,37 @@ public class InvertedIndexConstructor {
 					xCurrentTerm.setFrequency(++freq);
 					xCurrentTerm.getDocumentList().add(xDocument.getName());
 					xCurrentTerm.setIndice(p_DocIndex, 1);
-					m_TermList.put(s, xCurrentTerm);
+					m_TermMap.put(s, xCurrentTerm);
 				}
 			}
 			xCurrentDoc.setRawTermList(xTermList);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			m_logger.error("Unable to find doc file",e);
+			throw new IRException("Unable to find doc file");
 		} catch (IOException e) {
-			e.printStackTrace();
+			m_logger.error("Unable to load doc file",e);
+			throw new IRException("Unable to load doc file");
 		} finally {
 			try {
 				xCurrentDocReader.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				m_logger.error("Memory leak",e);
+				throw new IRException("Memory leak");
 			}
 		}
 		return xCurrentDoc;
 	}
 
-	private void postProcess() {
+	/**
+	 * Writes the inverted index to file
+	 * @throws IRException
+	 */
+	private void postProcess() throws IRException {
 		PrintWriter xFileWriter = null;
 		try {
 			String outputfile = m_configurator.get_inverted_index_file_path();
 			xFileWriter = new PrintWriter(new File(outputfile));
-			Set<Entry<String, Term>> termSet = m_TermList.entrySet();
+			Set<Entry<String, Term>> termSet = m_TermMap.entrySet();
 			Iterator<Entry<String, Term>> itr = termSet.iterator();
 			while(itr.hasNext()){
 				Entry<String, Term> tt=itr.next();
@@ -163,7 +215,8 @@ public class InvertedIndexConstructor {
 				xFileWriter.println("");
 			}		
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			m_logger.error("Unable to write to output file",e);
+			throw new IRException("Unable to write to  output  file");
 		}finally{
 			xFileWriter.flush();
 			xFileWriter.close();

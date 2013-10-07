@@ -10,10 +10,20 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Contains utility methods used in this application.
+ * @author rsunkara
+ *
+ */
 public class MyUtilities {
 	
 	private static Log m_logger = LogFactory.getLog(MyUtilities.class);
 	
+	/**
+	 * Loads the given properties file into Properties object.
+	 * @param p_PropertiesFilePath
+	 * @return
+	 */
 	public static Properties loadProperties(String p_PropertiesFilePath) {
 		m_logger.debug("Enter loadProperties()");
 		if (m_logger.isTraceEnabled()) {
@@ -50,6 +60,11 @@ public class MyUtilities {
 		return xProperties;
 	}
 
+	/**
+	 * Finds the list of files in the given directory path
+	 * @param p_inputDir
+	 * @return
+	 */
 	public static File[] getDocumentList(String p_inputDir){
 		File f = new File(p_inputDir);		
 		return f.listFiles();
