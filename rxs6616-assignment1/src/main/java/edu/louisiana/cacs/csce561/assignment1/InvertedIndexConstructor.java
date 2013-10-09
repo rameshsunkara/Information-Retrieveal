@@ -7,12 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -76,11 +76,11 @@ public class InvertedIndexConstructor {
 		m_logger.trace("In preProcess()");
 		m_DocFiles = MyUtilities.getDocumentList(m_configurator
 				.get_document_input_dir());
-		m_StopWordList = loadStopWords("[\\s\\n]");
+		m_StopWordList = loadStopWords(m_configurator.get_regex_stop_words());
 		m_logger.debug("Stop Words:"+m_StopWordList);
 		if (m_DocFiles.length > 0) {
 			m_DocumentList = new ArrayList<Document>();
-			m_TermMap = new HashMap<String, Term>();			
+			m_TermMap = new TreeMap<String, Term>();			
 		}
 		m_logger.trace("Exit preProcess()");
 	}
@@ -207,7 +207,7 @@ public class InvertedIndexConstructor {
 			while(itr.hasNext()){
 				Entry<String, Term> tt=itr.next();
 				Term t = tt.getValue();
-				xFileWriter.format("%15s[%2d]",t.getName(),t.getFrequency());
+				xFileWriter.format("%15s[%2d]",t.getName(),t.getDocumentList().size());
 				Iterator<String> docItr = t.getDocumentList().iterator();
 				while(docItr.hasNext()){
 					xFileWriter.format("\t--> %10s",docItr.next());
