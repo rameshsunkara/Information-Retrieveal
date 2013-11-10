@@ -168,14 +168,11 @@ public class InvertedIndexConstructor {
 						xCurrentTerm
 								.setIncidenceMatrixValues(new int[p_docSize]);
 					}
-					int freq = xCurrentTerm.getFrequency();
-					xCurrentTerm.setFrequency(++freq);
 					xCurrentTerm.getDocumentList().add(xDocument.getName());
 					xCurrentTerm.setIndice(p_DocIndex, 1);
 					m_TermMap.put(s, xCurrentTerm);
 				}
 			}
-			xCurrentDoc.setRawTermList(xTermList);
 		} catch (FileNotFoundException e) {
 			m_logger.error("Unable to find doc file",e);
 			throw new IRException("Unable to find doc file");

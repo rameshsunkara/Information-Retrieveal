@@ -40,7 +40,13 @@ public class Configurator {
 
 	public String get_document_input_dir() {
 		return get_resources_dir() + File.separator
-				+ m_configFile.getProperty("DOC_INPUT_DIR");
+				+ m_configFile.getProperty("DOC_INPUT_DIR")
+				+ File.separator
+				+ "dataset1"
+				+ File.separator
+				+ "democorpus"
+				+ File.separator
+				+ "stemmed_corpus";
 	}
 	
 	public String get_output_dir() {
@@ -53,9 +59,19 @@ public class Configurator {
 				+ m_configFile.getProperty("STOP_WORDS_FILE");
 	}
 	
-	public String get_term_document_file_path(){
+	public String get_term_document_incidence_file_path(){
 		return get_output_dir() + File.separator
-				+ m_configFile.getProperty("TERM_DOCUMENT_MATRIX_FILE");
+				+ m_configFile.getProperty("TERM_DOCUMENT_MATRIX_INCIDENCE_FILE");
+	}
+	
+	public String get_term_document_doc_freq_file_path(){
+		return get_output_dir() + File.separator
+				+ m_configFile.getProperty("TERM_DOCUMENT_MATRIX_DOCFREQ_FILE");
+	}
+	
+	public String get_term_document_norm_doc_file_path(){
+		return get_output_dir() + File.separator
+				+ m_configFile.getProperty("TERM_DOCUMENT_MATRIX_NORM_DOC_FREQ_FILE");
 	}
 	
 	public String get_inverted_index_file_path(){

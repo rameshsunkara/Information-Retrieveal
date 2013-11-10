@@ -30,10 +30,5 @@ public class Main {
 		//Construct the term-document constructor
 		TermDocumentMatrixConstructor xMatrixConstructor = new TermDocumentMatrixConstructor(xConfigurator);
 		xMatrixConstructor.constructMatrix();
-		
-		//Construct the inverted index
-		InvertedIndexConstructor xInvertedIndexConstructor = new InvertedIndexConstructor(xConfigurator);
-		xInvertedIndexConstructor.constructInvertedIndex();
 	}
-
 }

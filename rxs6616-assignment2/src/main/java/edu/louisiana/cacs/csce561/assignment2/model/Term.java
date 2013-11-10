@@ -17,8 +17,10 @@ public class Term {
 	
 	private int[] incidenceMatrixValues = null;
 	
-	private int frequency;
-
+	private int[] termDocFrequencies = null;
+	
+	private double[] normTermDocFrequencies = null;
+	
 	public String getName() {
 		return name;
 	}
@@ -48,21 +50,35 @@ public class Term {
 	public void setIndice(int index,int value){
 		this.incidenceMatrixValues[index] = value;
 	}
-		
-	public int getFrequency() {
-		return frequency;
+	
+	public int[] getTermDocFrequencies() {
+		return termDocFrequencies;
 	}
 
-	public void setFrequency(int frequency) {
-		this.frequency = frequency;
+	public void setTermDocFrequencies(int[] termDocFrequencies) {
+		this.termDocFrequencies = termDocFrequencies;
 	}
 
+	public void setTermDocFrequency(int docIndex,int termDocFrequency){
+		this.termDocFrequencies[docIndex] = termDocFrequency;
+	}
+	
+	public double[] getNormTermDocFrequencies() {
+		return normTermDocFrequencies;
+	}
+
+	public void setNormTermDocFrequencies(double[] normTermDocFrequencies) {
+		this.normTermDocFrequencies = normTermDocFrequencies;
+	}
+
+	public void setNormTermDocFrequency(int docIndex,double xNormTermDocFrequency){
+		this.normTermDocFrequencies[docIndex] = xNormTermDocFrequency;
+	}
+	
 	@Override
 	public String toString() {
 		return "Term [name=" + name + ", documentList=" + documentList
 				+ ", incidenceMatrixValues="
 				+ Arrays.toString(incidenceMatrixValues) + "]";
 	}
-	
-	
 }

@@ -1,6 +1,7 @@
 package edu.louisiana.cacs.csce561.assignment2.model;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Model to represents Document
@@ -11,9 +12,8 @@ public class Document {
 
 	private String name;
 	
-	private List<String> termList;
-	
-	private List<String> rawTermList;
+	//Stores the terms present in map
+	private Map<String,Term> termsMap = new HashMap<String,Term>();
 
 	public String getName() {
 		return name;
@@ -22,29 +22,17 @@ public class Document {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public List<String> getTermList() {
-		return termList;
+	
+	public Map<String, Term> getTermsMap() {
+		return termsMap;
 	}
 
-	public void setTermList(List<String> termList) {
-		this.termList = termList;
+	public void setTermsMap(Map<String, Term> termsMap) {
+		this.termsMap = termsMap;
 	}
-
-	public List<String> getRawTermList() {
-		return rawTermList;
-	}
-
-	public void setRawTermList(List<String> rawTermList) {
-		this.rawTermList = rawTermList;
-	}
-
+	
 	@Override
 	public String toString() {
-		return "Document [name=" + name + ", termList=" + termList
-				+ ", rawTermList=" + rawTermList + "]";
+		return "Document [name=" + name + ", termList=" + termsMap.keySet() + "]";
 	}
-	
-	
-	
 }

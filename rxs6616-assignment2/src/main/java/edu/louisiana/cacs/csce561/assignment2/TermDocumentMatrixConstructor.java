@@ -101,30 +101,38 @@ public class TermDocumentMatrixConstructor {
 		Document xCurrentDoc = new Document();
 		xCurrentDoc.setName(xDocument.getName());
 		BufferedReader xCurrentDocReader = null;
-		List<String> xTermList = new ArrayList<String>();
+		String xDocName = null;
+		String xTempTerm = null;
+		int xTermDocFrequency = 0;
+		double xNormTermDocFrequency = 0;
 		try {
 			xCurrentDocReader = new BufferedReader(new FileReader(xDocument));
-			String xCurrDoc = null;
-			while ((xCurrDoc = xCurrentDocReader.readLine()) != null) {
-				String[] parsedStrings = xCurrDoc.split("[\\s.]");
-				for (String s : parsedStrings) {
-					s = s.toLowerCase();
-					xTermList.add(s);
-					Term xCurrentTerm = null;
-					if (m_TermMap.containsKey(s)) {
-						xCurrentTerm = m_TermMap.get(s);
-					} else {
-						xCurrentTerm = new Term();
-						xCurrentTerm.setName(s);
-						xCurrentTerm
+			String xCurrLineInDoc = null;
+			xDocName = getDocumentName(xCurrentDocReader.readLine());
+			xCurrentDoc.setName(xDocName);
+			while ((xCurrLineInDoc = xCurrentDocReader.readLine()) != null) {
+				String[] parsedStrings = xCurrLineInDoc.split("[\\s]");
+				xTempTerm = parsedStrings[0].toLowerCase();
+				xTermDocFrequency = Integer.parseInt(parsedStrings[1]);
+				xNormTermDocFrequency = Double.parseDouble(parsedStrings[2]);
+				Term xCurrentTerm = null;
+				if (m_TermMap.containsKey(xTempTerm)) {
+					xCurrentTerm = m_TermMap.get(xTempTerm);
+				} else {
+					xCurrentTerm = new Term();
+					xCurrentTerm.setName(xTempTerm);
+					xCurrentTerm
 								.setIncidenceMatrixValues(new int[p_docSize]);
-					}
-					xCurrentTerm.getDocumentList().add(xDocument.getName());
-					xCurrentTerm.setIndice(p_DocIndex, 1);
-					m_TermMap.put(s, xCurrentTerm);
+					xCurrentTerm
+								.setTermDocFrequencies(new int[p_docSize]);
+					xCurrentTerm
+					.setNormTermDocFrequencies(new double[p_docSize]);
 				}
+					xCurrentTerm.setIndice(p_DocIndex, 1);
+					xCurrentTerm.setTermDocFrequency(p_DocIndex, xTermDocFrequency);
+					xCurrentTerm.setNormTermDocFrequency(p_DocIndex, xNormTermDocFrequency);
+					m_TermMap.put(xTempTerm, xCurrentTerm);
 			}
-			xCurrentDoc.setRawTermList(xTermList);
 		} catch (FileNotFoundException e) {
 			m_logger.error("Unable to find doc file",e);
 			throw new IRException("Unable to find doc file");
@@ -142,6 +150,11 @@ public class TermDocumentMatrixConstructor {
 		return xCurrentDoc;
 	}
 
+	private String getDocumentName(String p_firstLineInDoc) {
+		String[] parsedStrings = p_firstLineInDoc.split("[\\s]");
+		return parsedStrings[1].substring(0, parsedStrings[1].indexOf("."));
+	}
+
 	/**
 	 * Writes the term-document incidence matrix to file
 	 * @throws IRException
@@ -149,32 +162,64 @@ public class TermDocumentMatrixConstructor {
 
 	private void postProcess() throws IRException {
 		m_logger.trace("Total no.of terms:"+m_TermMap.size());
-		PrintWriter xFileWriter = null;
+		PrintWriter xIncidenceValWriter = null;
+		PrintWriter xDocFreqValWriter = null;
+		PrintWriter xNormDocFreqValWriter = null;
+		String emptyString = "";
 		try {
-			String outputfile = m_configurator.get_term_document_file_path();
-			xFileWriter = new PrintWriter(new File(outputfile));
-			xFileWriter.print("\t\t\t");
+			xIncidenceValWriter = new PrintWriter(new File(m_configurator.get_term_document_incidence_file_path()));
+			xDocFreqValWriter = new PrintWriter(new File(m_configurator.get_term_document_doc_freq_file_path()));
+			xNormDocFreqValWriter = new PrintWriter(new File(m_configurator.get_term_document_norm_doc_file_path()));
+			
+			xIncidenceValWriter.format("%-15s",emptyString);
+			xDocFreqValWriter.format("%-15s",emptyString);
+			xNormDocFreqValWriter.format("%-15s",emptyString);
+			
 			for(int i=0;i<m_DocFiles.length;i++){
-				xFileWriter.format("\t %10s ",m_DocFiles[i].getName());
+				xIncidenceValWriter.format("%-10s ",getDocNameFromFileName(m_DocFiles[i].getName()));
+				xDocFreqValWriter.format("%-10s ",getDocNameFromFileName(m_DocFiles[i].getName()));
+				xNormDocFreqValWriter.format("%-10s ",getDocNameFromFileName(m_DocFiles[i].getName()));
 			}
-			xFileWriter.println();
+			
+			xIncidenceValWriter.println();
+			xDocFreqValWriter.println();
+			xNormDocFreqValWriter.println();
+			
 			Set<Entry<String, Term>> termSet = m_TermMap.entrySet();
 			Iterator<Entry<String, Term>> itr = termSet.iterator();
 			while(itr.hasNext()){
 				Entry<String, Term> tt=itr.next();
 				Term t = tt.getValue();
-				xFileWriter.format("%15s",t.getName());
+				
+				xIncidenceValWriter.format("%-15s",t.getName());
+				xDocFreqValWriter.format("%-15s",t.getName());
+				xNormDocFreqValWriter.format("%-15s",t.getName());
+				
 				for(int j=0;j<t.getIncidenceMatrixValues().length;j++){
-					xFileWriter.format("\t %10d",t.getIncidenceMatrixValues()[j]);
+					xIncidenceValWriter.format("%d%-10s",t.getIncidenceMatrixValues()[j],emptyString);
+					xDocFreqValWriter.format("%d%-10s",t.getTermDocFrequencies()[j],emptyString);
+					xNormDocFreqValWriter.format("%.2f%-7s",t.getNormTermDocFrequencies()[j],emptyString);
 				}
-				xFileWriter.println("");
+				xIncidenceValWriter.println();
+				xDocFreqValWriter.println();
+				xNormDocFreqValWriter.println();
 			}		
 		} catch (FileNotFoundException e) {
 			m_logger.error("Unable to write to output file",e);
 			throw new IRException("Unable to write to  output  file");
 		}finally{
-			xFileWriter.flush();
-			xFileWriter.close();
+			xIncidenceValWriter.flush();
+			xIncidenceValWriter.close();
+			
+			xDocFreqValWriter.flush();
+			xDocFreqValWriter.close();
+			
+			xNormDocFreqValWriter.flush();
+			xNormDocFreqValWriter.close();
 		}	
+	}
+
+	private static String getDocNameFromFileName(String p_StemmedFilename) {
+		return p_StemmedFilename.substring(p_StemmedFilename.indexOf("_")+1, p_StemmedFilename.indexOf("."));
 	}
 }
