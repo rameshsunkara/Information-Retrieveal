@@ -1,0 +1,1 @@
+Information retrieval is involved in querying for dynamic information need from a static content base.
