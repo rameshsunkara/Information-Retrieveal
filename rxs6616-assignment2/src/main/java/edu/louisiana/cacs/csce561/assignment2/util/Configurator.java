@@ -70,7 +70,14 @@ public class Configurator {
 	public String get_output_dir() {
 		return get_resources_dir() + File.separator
 				+ m_configFile.getProperty("OUTPUT_DIR");
-	}	
+	}
+	
+	public String get_gen_query_output_dir() {
+		return get_resources_dir() + File.separator
+				+ m_configFile.getProperty("OUTPUT_DIR")
+				+File.separator
+				+"query_results";
+	}
 	
 	public String get_stopword_file_path(){
 		return get_resources_dir() + File.separator
