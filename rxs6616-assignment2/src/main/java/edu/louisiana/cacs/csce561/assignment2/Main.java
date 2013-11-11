@@ -1,7 +1,9 @@
 package edu.louisiana.cacs.csce561.assignment2;
 
 import java.io.File;
+import java.util.Map;
 
+import edu.louisiana.cacs.csce561.assignment2.model.Term;
 import edu.louisiana.cacs.csce561.assignment2.util.Configurator;
 
 /**
@@ -29,6 +31,12 @@ public class Main {
 		
 		//Construct the term-document constructor
 		TermDocumentMatrixConstructor xMatrixConstructor = new TermDocumentMatrixConstructor(xConfigurator);
-		xMatrixConstructor.constructMatrix();
+		Map<String,Term> termMap = xMatrixConstructor.constructMatrix();
+		
+		SearchFiles searchFiles = new SearchFiles(xConfigurator, termMap);
+		searchFiles.findRSV();
+		
+		EngineEvaluator eval = new EngineEvaluator(xConfigurator);
+		eval.evaluate();
 	}
 }

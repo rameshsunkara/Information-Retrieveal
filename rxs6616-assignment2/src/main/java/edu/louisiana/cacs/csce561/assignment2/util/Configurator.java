@@ -37,16 +37,34 @@ public class Configurator {
 	public String get_resources_dir() {
 		return m_userdir + m_configFile.getProperty("RESOURCES_DIR");
 	}
+	
+	public String get_queires_file() {
+		return get_resources_dir() 
+				+ File.separator
+				+m_configFile.getProperty("QUERIES_FILE");
+	}
 
-	public String get_document_input_dir() {
+	
+	
+	public String get_current_dataset_path(){
 		return get_resources_dir() + File.separator
 				+ m_configFile.getProperty("DOC_INPUT_DIR")
 				+ File.separator
 				+ "dataset1"
 				+ File.separator
-				+ "democorpus"
+				+ "democorpus";
+	}
+	
+	public String get_document_input_dir() {
+		return get_current_dataset_path() 
 				+ File.separator
 				+ "stemmed_corpus";
+	}
+	
+	public String get_query_result_dir() {
+		return get_current_dataset_path() 
+				+ File.separator
+				+ m_configFile.getProperty("QUERY_RESULT_DIR");
 	}
 	
 	public String get_output_dir() {
@@ -57,6 +75,11 @@ public class Configurator {
 	public String get_stopword_file_path(){
 		return get_resources_dir() + File.separator
 				+ m_configFile.getProperty("STOP_WORDS_FILE");
+	}
+	
+	public String get_evaluation_result_file_path(){
+		return get_output_dir() + File.separator
+				+ m_configFile.getProperty("EVALUATION_OUTPUT_FILE");
 	}
 	
 	public String get_term_document_incidence_file_path(){

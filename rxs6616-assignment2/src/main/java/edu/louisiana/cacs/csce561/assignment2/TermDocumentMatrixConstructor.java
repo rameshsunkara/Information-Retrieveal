@@ -53,14 +53,16 @@ public class TermDocumentMatrixConstructor {
 		m_configurator = p_configurator;
 	}
 
-	public void constructMatrix() {
+	public Map<String, Term> constructMatrix() {
 		try {
 			preProcess();
 			process();
 			postProcess();
+			
 		} catch (IRException e) {
 			m_logger.error(e.getMessage(),e);
 		}
+		return m_TermMap;
 	}
 
 	/**
@@ -176,9 +178,9 @@ public class TermDocumentMatrixConstructor {
 			xNormDocFreqValWriter.format("%-15s",emptyString);
 			
 			for(int i=0;i<m_DocFiles.length;i++){
-				xIncidenceValWriter.format("%-10s ",getDocNameFromFileName(m_DocFiles[i].getName()));
-				xDocFreqValWriter.format("%-10s ",getDocNameFromFileName(m_DocFiles[i].getName()));
-				xNormDocFreqValWriter.format("%-10s ",getDocNameFromFileName(m_DocFiles[i].getName()));
+				xIncidenceValWriter.format("%-10s ",MyUtilities.getDocNameFromFileName(m_DocFiles[i].getName()));
+				xDocFreqValWriter.format("%-10s ",MyUtilities.getDocNameFromFileName(m_DocFiles[i].getName()));
+				xNormDocFreqValWriter.format("%-10s ",MyUtilities.getDocNameFromFileName(m_DocFiles[i].getName()));
 			}
 			
 			xIncidenceValWriter.println();
@@ -219,7 +221,5 @@ public class TermDocumentMatrixConstructor {
 		}	
 	}
 
-	private static String getDocNameFromFileName(String p_StemmedFilename) {
-		return p_StemmedFilename.substring(p_StemmedFilename.indexOf("_")+1, p_StemmedFilename.indexOf("."));
-	}
+	
 }
