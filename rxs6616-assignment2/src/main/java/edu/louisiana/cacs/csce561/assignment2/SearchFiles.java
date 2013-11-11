@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -81,13 +82,22 @@ public class SearchFiles {
 		int count = 0;
 		String[] queryTerms = q.split("[\\s.,]");
 		List<String> queryTermList = new ArrayList<String>(Arrays.asList(queryTerms));
+		Map<String,Double> queryWeightMap = new HashMap<String, Double>();
+		int termWeight = 0;
+		for(String eachQueryTerm:queryTerms){
+			for(String s:queryTermList){
+				if(eachQueryTerm.equalsIgnoreCase(s))
+					termWeight++;
+			}
+			queryWeightMap.put(eachQueryTerm, 1/(double)termWeight);
+		}
 		String currTerm = null;
 		Set<Entry<String, Term>> termSet = m_termMap.entrySet();
 		Iterator<Entry<String, Term>> termItr = termSet.iterator();
 		while (termItr.hasNext()) {
 			currTerm = termItr.next().getKey();
 			if(queryTermList.contains(currTerm)){
-				queryVector[count] = 1.0;
+				queryVector[count] = queryWeightMap.get(currTerm);
 			}
 			count++;
 		}
