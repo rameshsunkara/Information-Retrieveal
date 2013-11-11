@@ -1,0 +1,26 @@
+.I doc_40.txt
+abhishek 2 1.00
+actor 1 0.50
+bachchan 2 1.00
+career 1 0.50
+catwalk 1 0.50
+charit 1 0.50
+children 1 0.50
+choic 1 0.50
+come 1 0.50
+complet 1 0.50
+continu 1 0.50
+daughter 1 0.50
+decid 1 0.50
+film 1 0.50
+fun 1 0.50
+grow 1 0.50
+happi 1 0.50
+lend 1 0.50
+let 1 0.50
+support 1 0.50
+sure 1 0.50
+talk 1 0.50
+think 1 0.50
+walk 1 0.50
+want 1 0.50

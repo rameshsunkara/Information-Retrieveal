@@ -1,0 +1,19 @@
+.I doc_25.txt
+creativ 1 0.50
+daili 1 0.50
+desir 1 0.50
+feel 1 0.50
+horoscop 1 0.50
+inclin 1 0.50
+libra 2 1.00
+memori 1 0.50
+music 1 0.50
+paint 1 0.50
+passion 1 0.50
+re 1 0.50
+romant 1 0.50
+spiritu 1 0.50
+temper 1 0.50
+todai 1 0.50
+want 1 0.50
+write 1 0.50

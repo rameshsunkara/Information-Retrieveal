@@ -1,0 +1,24 @@
+.I doc_45.txt
+ancient 1 0.33
+babylonian 1 0.33
+china 1 0.33
+commun 1 0.33
+countri 1 0.33
+cultur 1 0.33
+east 1 0.33
+europ 1 0.33
+greatli 1 0.33
+hebrew 1 0.33
+hindu 1 0.33
+india 1 0.33
+interest 1 0.33
+origin 1 0.33
+palmistri 3 1.00
+persia 1 0.33
+persian 1 0.33
+practic 3 1.00
+show 1 0.33
+studi 2 0.67
+sumerian 1 0.33
+tibet 1 0.33
+tibetan 1 0.33

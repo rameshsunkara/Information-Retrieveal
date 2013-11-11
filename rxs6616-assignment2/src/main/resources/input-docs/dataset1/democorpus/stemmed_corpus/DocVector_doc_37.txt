@@ -1,0 +1,26 @@
+.I doc_37.txt
+advantag 1 0.50
+barrier 1 0.50
+busi 2 1.00
+challeng 1 0.50
+commun 1 0.50
+compani 1 0.50
+countri 1 0.50
+custom 2 1.00
+deliv 1 0.50
+drive 1 0.50
+effect 1 0.50
+languag 2 1.00
+lead 1 0.50
+learn 1 0.50
+learner 1 0.50
+million 1 0.50
+overcom 1 0.50
+read 1 0.50
+result 1 0.50
+rosetta 2 1.00
+stone 2 1.00
+stori 2 1.00
+success 2 1.00
+train 1 0.50
+varieti 1 0.50

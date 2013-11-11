@@ -1,0 +1,19 @@
+.I doc_32.txt
+australia 1 0.33
+came 1 0.33
+centuri 1 0.33
+class 1 0.33
+cricket 1 0.33
+debut 2 0.67
+dhawan 3 1.00
+fastest 1 0.33
+india 1 0.33
+mohali 1 0.33
+ninth 1 0.33
+observ 1 0.33
+shikhar 2 0.67
+stroke 1 0.33
+stun 1 0.33
+test 1 0.33
+written 1 0.33
+year 1 0.33

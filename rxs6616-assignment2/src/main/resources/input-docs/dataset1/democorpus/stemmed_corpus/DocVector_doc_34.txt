@@ -1,0 +1,21 @@
+.I doc_34.txt
+back 1 0.20
+ball 5 1.00
+beamer 1 0.20
+bowler 2 0.40
+break 1 0.20
+call 1 0.20
+common 1 0.20
+commonli 1 0.20
+creas 3 0.60
+danger 1 0.20
+deliveri 1 0.20
+foot 4 0.80
+front 2 0.40
+insid 1 0.20
+land 2 0.40
+reason 2 0.40
+result 1 0.20
+rule 1 0.20
+slide 1 0.20
+varieti 1 0.20

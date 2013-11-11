@@ -1,0 +1,20 @@
+.I doc_48.txt
+astrolog 2 0.50
+averag 1 0.25
+calcul 1 0.25
+case 1 0.25
+dai 1 0.25
+daili 4 1.00
+free 1 0.25
+horoscop 4 1.00
+interpret 1 0.25
+miss 1 0.25
+overview 1 0.25
+predict 1 0.25
+profession 1 0.25
+sign 1 0.25
+todai 1 0.25
+tomorrow 1 0.25
+top 1 0.25
+yesterdai 1 0.25
+zodiac 1 0.25

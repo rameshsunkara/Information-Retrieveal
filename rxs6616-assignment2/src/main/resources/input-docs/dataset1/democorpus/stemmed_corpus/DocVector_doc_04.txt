@@ -1,0 +1,22 @@
+.I doc_04.txt
+affili 1 0.33
+allow 1 0.33
+associ 1 0.33
+cricket 1 0.33
+cup 2 0.67
+decid 1 0.33
+edit 1 0.33
+icc 3 1.00
+immedi 1 0.33
+member 1 0.33
+nation 2 0.67
+particip 1 0.33
+plai 1 0.33
+qualifi 1 0.33
+reduc 1 0.33
+regul 1 0.33
+team 1 0.33
+ten 1 0.33
+test 1 0.33
+tournament 2 0.67
+world 2 0.67

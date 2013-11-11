@@ -1,0 +1,15 @@
+.I doc_16.txt
+assist 1 0.25
+ball 2 0.50
+bowler 2 0.50
+call 3 0.75
+default 1 0.25
+encroach 1 0.25
+end 2 0.50
+fielder 1 0.25
+make 1 0.25
+signal 1 0.25
+striker 1 0.25
+throw 1 0.25
+umpir 4 1.00
+wicket 1 0.25

@@ -1,0 +1,23 @@
+.I doc_20.txt
+allow 2 0.50
+bat 1 0.25
+block 3 0.75
+circl 3 0.75
+complet 1 0.25
+compris 1 0.25
+earlier 1 0.25
+field 1 0.25
+fielder 3 0.75
+in 1 0.25
+maximum 1 0.25
+non 1 0.25
+odi 1 0.25
+over 4 1.00
+powerplai 4 1.00
+reduct 1 0.25
+restrict 1 0.25
+side 1 0.25
+ten 1 0.25
+th 1 0.25
+uninterrupt 1 0.25
+yard 1 0.25

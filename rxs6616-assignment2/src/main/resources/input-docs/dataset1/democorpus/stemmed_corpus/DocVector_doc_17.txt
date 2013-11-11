@@ -1,0 +1,6 @@
+.I doc_17.txt
+daili 19 1.00
+ell 1 0.05
+free 12 0.63
+horoscop 19 1.00
+overview 1 0.05

@@ -1,0 +1,23 @@
+.I doc_35.txt
+bang 2 0.33
+cast 5 0.83
+date 3 0.50
+filmographi 1 0.17
+headlin 1 0.17
+hindi 5 0.83
+hoon 1 0.17
+hrithik 1 0.17
+krishna 2 0.33
+krrish 1 0.17
+main 1 0.17
+mein 1 0.17
+movi 2 0.33
+nov 2 0.33
+paani 1 0.17
+photo 6 1.00
+releas 5 0.83
+roshan 1 0.17
+shuddhi 1 0.17
+stori 5 0.83
+upcom 2 0.33
+year 2 0.33

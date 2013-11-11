@@ -1,0 +1,16 @@
+.I doc_02.txt
+australia 1 0.50
+cricket 2 1.00
+cup 2 1.00
+decid 1 0.50
+evenli 1 0.50
+final 1 0.50
+game 1 0.50
+host 1 0.50
+icc 2 1.00
+jointli 1 0.50
+locat 2 1.00
+split 1 0.50
+th 1 0.50
+world 2 1.00
+zealand 1 0.50

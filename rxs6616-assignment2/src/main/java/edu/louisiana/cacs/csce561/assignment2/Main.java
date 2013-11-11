@@ -2,6 +2,7 @@ package edu.louisiana.cacs.csce561.assignment2;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Scanner;
 
 import edu.louisiana.cacs.csce561.assignment2.model.Term;
 import edu.louisiana.cacs.csce561.assignment2.util.Configurator;
@@ -33,8 +34,18 @@ public class Main {
 		TermDocumentMatrixConstructor xMatrixConstructor = new TermDocumentMatrixConstructor(xConfigurator);
 		Map<String,Term> termMap = xMatrixConstructor.constructMatrix();
 		
-		SearchFiles searchFiles = new SearchFiles(xConfigurator, termMap);
-		searchFiles.findRSV();
+		Scanner scan = new Scanner(System.in);
+		String searchQuery = null;
+		do{
+			System.out.println("Enter the search query. If you want to exit type XXX");
+			searchQuery = scan.nextLine();
+			if(searchQuery.equalsIgnoreCase("XXX"))
+				break;
+			
+			SearchFiles searchFiles = new SearchFiles(xConfigurator, termMap);
+			searchFiles.findRSV(searchQuery);
+		}while(true);
+		
 		
 		EngineEvaluator eval = new EngineEvaluator(xConfigurator);
 		eval.evaluate();

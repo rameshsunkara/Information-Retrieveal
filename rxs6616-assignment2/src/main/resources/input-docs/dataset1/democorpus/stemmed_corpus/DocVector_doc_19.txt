@@ -1,0 +1,21 @@
+.I doc_19.txt
+averag 1 0.33
+centuri 1 0.33
+cricket 1 0.33
+cup 2 0.67
+dhawan 3 1.00
+in 1 0.33
+india 1 0.33
+lead 1 0.33
+made 1 0.33
+name 1 0.33
+plai 1 0.33
+player 1 0.33
+record 1 0.33
+run 3 1.00
+scorer 1 0.33
+shikhar 3 1.00
+singl 1 0.33
+total 1 0.33
+tournament 1 0.33
+world 2 0.67

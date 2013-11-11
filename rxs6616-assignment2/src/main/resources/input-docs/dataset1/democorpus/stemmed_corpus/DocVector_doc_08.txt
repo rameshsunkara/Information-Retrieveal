@@ -1,0 +1,12 @@
+.I doc_08.txt
+chang 1 0.20
+daili 5 1.00
+free 4 0.80
+horoscop 5 1.00
+index 1 0.20
+june 1 0.20
+plan 2 0.40
+planetari 1 0.20
+problem 1 0.20
+saturdai 1 0.20
+subject 1 0.20

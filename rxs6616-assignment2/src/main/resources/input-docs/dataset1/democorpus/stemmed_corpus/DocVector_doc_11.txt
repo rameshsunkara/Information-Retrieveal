@@ -1,0 +1,25 @@
+.I doc_11.txt
+add 1 0.25
+allow 1 0.25
+appli 1 0.25
+circl 1 0.25
+concern 1 0.25
+cricket 2 0.50
+dai 1 0.25
+depend 1 0.25
+excit 1 0.25
+featur 1 0.25
+field 2 0.50
+in 1 0.25
+intend 1 0.25
+intern 1 0.25
+introduc 1 0.25
+octob 1 0.25
+odi 2 0.50
+player 1 0.25
+powerplai 4 1.00
+restrict 2 0.50
+start 1 0.25
+team 1 0.25
+type 1 0.25
+yard 1 0.25
