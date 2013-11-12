@@ -55,6 +55,10 @@ public class Configurator {
 				+ "democorpus";
 	}
 	
+	public String get_given_queries_file_path(){
+		return get_current_dataset_path()+File.separator+"stemmed_queries.txt";
+	}
+	
 	public String get_document_input_dir() {
 		return get_current_dataset_path() 
 				+ File.separator
@@ -76,6 +80,15 @@ public class Configurator {
 		return get_resources_dir() + File.separator
 				+ m_configFile.getProperty("OUTPUT_DIR")
 				+File.separator
+				+"search_query_results";
+	}
+	
+	public String get_eval_gen_query_output_dir() {
+		return get_resources_dir() + File.separator
+				+ m_configFile.getProperty("OUTPUT_DIR")
+				+File.separator
+				+"eval"
+				+File.separator
 				+"query_results";
 	}
 	
@@ -86,6 +99,7 @@ public class Configurator {
 	
 	public String get_evaluation_result_file_path(){
 		return get_output_dir() + File.separator
+				+"eval" +File.separator
 				+ m_configFile.getProperty("EVALUATION_OUTPUT_FILE");
 	}
 	

@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 import edu.louisiana.cacs.csce561.assignment2.model.Query;
 import edu.louisiana.cacs.csce561.assignment2.model.QueryResult;
+import edu.louisiana.cacs.csce561.assignment2.model.Term;
 import edu.louisiana.cacs.csce561.assignment2.util.Configurator;
 import edu.louisiana.cacs.csce561.assignment2.util.MyUtilities;
 
@@ -32,21 +33,24 @@ public class EngineEvaluator {
 	private Configurator m_configurator = null;
 
 	List<QueryResult> m_qResults = null;
+	
+	private Map<String, Term> m_termMap = null;
 
-	public EngineEvaluator(Configurator p_configurator) {
+	public EngineEvaluator(Configurator p_configurator, Map<String, Term> termMap) {
 		m_configurator = p_configurator;
+		m_termMap = termMap;
 	}
 
 	public double calculateRecall(int rANK_LEVELS2, QueryResult qResult) {
-		Map<String,Integer> fileRSVMap = qResult.getFileRSVMap();
-		Set<Entry<String,Integer>> entrySet = fileRSVMap.entrySet();
-		Iterator<Entry<String, Integer>> entrySetItr = entrySet.iterator();
+		Map<String,Double> fileRSVMap = qResult.getFileRSVMap();
+		Set<Entry<String,Double>> entrySet = fileRSVMap.entrySet();
+		Iterator<Entry<String, Double>> entrySetItr = entrySet.iterator();
 		double recall = 0;
 		int count =1;
 		int relavantDocCountTillRank = 0;
 		int totalRelvantDocCount = 0;
 		while(entrySetItr.hasNext()){
-			Entry<String,Integer> entry = entrySetItr.next();
+			Entry<String,Double> entry = entrySetItr.next();
 			if(entry.getValue()!=0){
 				++totalRelvantDocCount;
 				if(count<=rANK_LEVELS2)
@@ -59,14 +63,14 @@ public class EngineEvaluator {
 	}
 
 	public double calculatePrecision(int rANK_LEVELS2, QueryResult qResult) {
-		Map<String,Integer> fileRSVMap = qResult.getFileRSVMap();
-		Set<Entry<String,Integer>> entrySet = fileRSVMap.entrySet();
-		Iterator<Entry<String, Integer>> entrySetItr = entrySet.iterator();
+		Map<String,Double> fileRSVMap = qResult.getFileRSVMap();
+		Set<Entry<String,Double>> entrySet = fileRSVMap.entrySet();
+		Iterator<Entry<String, Double>> entrySetItr = entrySet.iterator();
 		double precision = 0;
 		int count =1;
 		int relavantDocCountTillRank = 0;
 		while(entrySetItr.hasNext()){
-			Entry<String,Integer> entry = entrySetItr.next();
+			Entry<String,Double> entry = entrySetItr.next();
 			if(entry.getValue()!=0){
 				++relavantDocCountTillRank;
 			}
@@ -78,11 +82,34 @@ public class EngineEvaluator {
 		return precision;
 	}
 
-	public List<Query> readQueries() {
-		return null;
+	public List<String> readQueries() {
+		BufferedReader xCurrentDocReader = null;
+		String xCurrLineInDoc = null;
+		List<String> queryList = new ArrayList<String>();
+		File f = new File(m_configurator.get_given_queries_file_path());
+		try {
+			xCurrentDocReader = new BufferedReader(new FileReader(
+					f));
+			while((xCurrLineInDoc = xCurrentDocReader.readLine())!=null){
+				queryList.add(xCurrLineInDoc);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			if(xCurrentDocReader!=null)
+				try {
+					xCurrentDocReader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+		
+		return queryList;
 	}
 
 	public void evaluate() {
+		List<String> queries = readQueries();
+		generateQueryResults(queries);
 		m_qResults = readQueryResult();
 		int querySetSize = m_qResults.size();
 		double[][] precisionValues = new double[RANK_LEVELS.length][querySetSize];
@@ -130,6 +157,14 @@ public class EngineEvaluator {
 		
 	}
 
+	private void generateQueryResults(List<String> queries) {
+		SearchFiles searchFiles = new SearchFiles(m_configurator, m_termMap,true);
+		Iterator<String> queryItr = queries.iterator();
+		while(queryItr.hasNext()){
+			searchFiles.findRSV(queryItr.next());
+		}
+	}
+
 	private double findAverage(double[] ds, int querySetSize) {
 		double sum = 0;
 		for (double d : ds) {
@@ -140,7 +175,7 @@ public class EngineEvaluator {
 
 	public List<QueryResult> readQueryResult() {
 		File[] qResultFiles = MyUtilities.getDocumentList(m_configurator
-				.get_query_result_dir());
+				.get_eval_gen_query_output_dir());
 		BufferedReader xCurrentDocReader = null;
 		List<QueryResult> qrList = new ArrayList<QueryResult>();
 		String xCurrLineInDoc = null;
@@ -158,7 +193,7 @@ public class EngineEvaluator {
 					String[] parsedStrings = xCurrLineInDoc.split("[\\s]");
 					//System.out.println(parsedStrings[0] +"--"+parsedStrings[1]);
 					queryReslult.getFileRSVMap().put(parsedStrings[0],
-							Integer.parseInt(parsedStrings[1]));
+					Double.parseDouble(parsedStrings[1]));
 				}
 				qrList.add(queryReslult);
 			} catch (FileNotFoundException e) {

@@ -36,10 +36,13 @@ public class SearchFiles {
 	private Map<String, Term> m_termMap = null;
 
 	private List<Query> m_qrList = null;
+	
+	private boolean m_isEvaluator = false;
 
-	public SearchFiles(Configurator p_configurator, Map<String, Term> p_termMap) {
+	public SearchFiles(Configurator p_configurator, Map<String, Term> p_termMap,boolean isEvaluator) {
 		m_configurator = p_configurator;
 		m_termMap = p_termMap;
+		m_isEvaluator = isEvaluator;
 	}
 
 	public void findRSV(String searchQuery) {
@@ -62,16 +65,29 @@ public class SearchFiles {
 
 	private void printResults(SortedMap<String, Double> rsvMap,String searchQuery){
 		PrintWriter xRSVValuePrinter = null;
+		Map<String, Double> sortedRSVMap = null;
+		Set<Entry<String, Double>> termSet = null;
+		File f = null;
 		try {
-			xRSVValuePrinter = new PrintWriter(new File(m_configurator.get_gen_query_output_dir()+File.separator+searchQuery+"_results"));
+			if(m_isEvaluator)
+				f = new File(m_configurator.get_eval_gen_query_output_dir()+File.separator+MyUtilities.getFileNameForQuery(searchQuery));
+			else
+				f = new File(m_configurator.get_gen_query_output_dir()+File.separator+MyUtilities.getFileNameForQuery(searchQuery));
+			
+			xRSVValuePrinter = new PrintWriter(f);
 			xRSVValuePrinter.println(searchQuery);
-			Map<String, Double> rsvMap2 = new TreeMap<String, Double>();
-			rsvMap2 = MyUtilities.sortByValues(rsvMap);
-			Set<Entry<String, Double>> termSet = rsvMap2.entrySet();
+			if(m_isEvaluator){
+				 termSet = rsvMap.entrySet(); 
+			}else{
+				sortedRSVMap = new TreeMap<String, Double>();
+				sortedRSVMap = MyUtilities.sortByValues(rsvMap);
+				 termSet = sortedRSVMap.entrySet();
+			}
+			
 			Iterator<Entry<String, Double>> termItr = termSet.iterator();
 			while (termItr.hasNext()) {
 				Entry<String, Double> tt = termItr.next();
-				xRSVValuePrinter.format(tt.getKey() + "==" + tt.getValue()+"\n");
+				xRSVValuePrinter.format(tt.getKey() + " " + tt.getValue()+"\n");
 			}
 		} catch (FileNotFoundException e) {
 			m_logger.error("FileNotFoundException",e);
@@ -80,16 +96,8 @@ public class SearchFiles {
 				xRSVValuePrinter.close();
 			}
 		}
-		
-		/*Map<String, Double> rsvMap2 = new TreeMap<String, Double>();
-		rsvMap2 = MyUtilities.sortByValues(rsvMap);
-		Set<Entry<String, Double>> termSet = rsvMap2.entrySet();
-		Iterator<Entry<String, Double>> termItr = termSet.iterator();
-		while (termItr.hasNext()) {
-			Entry<String, Double> tt = termItr.next();
-			System.out.println(tt.getKey() + "==" + tt.getValue());
-		}*/
 	}
+	
 	private double findRsv(double[] docVector, double[] queryVector) {
 		double numerator = vectorProduct(docVector, queryVector);
 		double denominator = magnitude(docVector) * magnitude(queryVector);

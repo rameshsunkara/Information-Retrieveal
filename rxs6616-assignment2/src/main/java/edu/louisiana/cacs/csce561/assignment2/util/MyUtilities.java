@@ -102,4 +102,15 @@ public class MyUtilities {
       
         return sortedMap;
     }
+	
+	
+	public static String getFileNameForQuery(String p_searchQuery){
+		String[] queryTerms = p_searchQuery.split("[\\s]");
+		String fileName = "";
+		for(String s:queryTerms){
+			fileName = fileName+s+"_";
+		}
+		fileName = fileName+"results";
+		return fileName;
+	}
 }

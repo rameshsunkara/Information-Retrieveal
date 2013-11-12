@@ -21,7 +21,6 @@ import edu.louisiana.cacs.csce561.assignment2.util.Configurator;
 public class Main {
 
 	public static void main(String []args){
-		
 		Configurator xConfigurator = new Configurator();
 		String xPropertiesFilePath = System.getProperty("user.dir") + File.separator
 				+ "src" + File.separator + "main" + File.separator
@@ -42,12 +41,12 @@ public class Main {
 			if(searchQuery.equalsIgnoreCase("XXX"))
 				break;
 			
-			SearchFiles searchFiles = new SearchFiles(xConfigurator, termMap);
+			SearchFiles searchFiles = new SearchFiles(xConfigurator, termMap,false);
 			searchFiles.findRSV(searchQuery);
 		}while(true);
 		
 		
-		EngineEvaluator eval = new EngineEvaluator(xConfigurator);
+		EngineEvaluator eval = new EngineEvaluator(xConfigurator,termMap);
 		eval.evaluate();
 	}
 }
