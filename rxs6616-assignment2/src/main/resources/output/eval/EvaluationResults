@@ -1,20 +1,170 @@
-***********************************
-Average Precision at RANK 10 is 0.1700
-Average Recall at RANK 10 is 0.1516
-***********************************
-***********************************
-Average Precision at RANK 20 is 0.1900
-Average Recall at RANK 20 is 0.3532
-***********************************
-***********************************
-Average Precision at RANK 30 is 0.1833
-Average Recall at RANK 30 is 0.5622
-***********************************
-***********************************
-Average Precision at RANK 40 is 0.1825
-Average Recall at RANK 40 is 0.7445
-***********************************
-***********************************
-Average Precision at RANK 50 is 0.1960
-Average Recall at RANK 50 is 1.0000
-***********************************
+Recall at 10 for Query:abhishek_bachchan_daughter is:1.0
+Precision at 10 for Query:abhishek_bachchan_daughter is:0.5
+
+Recall at 10 for Query:ball_reason_cricket is:1.0
+Precision at 10 for Query:ball_reason_cricket is:0.5
+
+Recall at 10 for Query:free_horoscop_daili is:1.0
+Precision at 10 for Query:free_horoscop_daili is:0.5
+
+Recall at 10 for Query:hrithik_movi_releas_date is:1.0
+Precision at 10 for Query:hrithik_movi_releas_date is:0.5
+
+Recall at 10 for Query:icc_cricket_world_cup is:1.0
+Precision at 10 for Query:icc_cricket_world_cup is:0.5
+
+Recall at 10 for Query:palmistri is:1.0
+Precision at 10 for Query:palmistri is:0.5
+
+Recall at 10 for Query:powerplai_rule_odi_cricket is:0.8
+Precision at 10 for Query:powerplai_rule_odi_cricket is:0.4
+
+Recall at 10 for Query:salman_khan_person_life is:1.0
+Precision at 10 for Query:salman_khan_person_life is:0.5
+
+Recall at 10 for Query:shikhar_dhawan is:0.8
+Precision at 10 for Query:shikhar_dhawan is:0.4
+
+Recall at 10 for Query:stone_success_studi is:1.0
+Precision at 10 for Query:stone_success_studi is:0.5
+
+
+Average Recall value at 10 :0.96
+Average Precision value at 10 :0.48
+***********************************************
+Recall at 20 for Query:abhishek_bachchan_daughter is:1.0
+Precision at 20 for Query:abhishek_bachchan_daughter is:0.25
+
+Recall at 20 for Query:ball_reason_cricket is:1.0
+Precision at 20 for Query:ball_reason_cricket is:0.25
+
+Recall at 20 for Query:free_horoscop_daili is:1.0
+Precision at 20 for Query:free_horoscop_daili is:0.25
+
+Recall at 20 for Query:hrithik_movi_releas_date is:1.0
+Precision at 20 for Query:hrithik_movi_releas_date is:0.25
+
+Recall at 20 for Query:icc_cricket_world_cup is:1.0
+Precision at 20 for Query:icc_cricket_world_cup is:0.25
+
+Recall at 20 for Query:palmistri is:1.0
+Precision at 20 for Query:palmistri is:0.25
+
+Recall at 20 for Query:powerplai_rule_odi_cricket is:0.8
+Precision at 20 for Query:powerplai_rule_odi_cricket is:0.2
+
+Recall at 20 for Query:salman_khan_person_life is:1.0
+Precision at 20 for Query:salman_khan_person_life is:0.25
+
+Recall at 20 for Query:shikhar_dhawan is:0.8
+Precision at 20 for Query:shikhar_dhawan is:0.2
+
+Recall at 20 for Query:stone_success_studi is:1.0
+Precision at 20 for Query:stone_success_studi is:0.25
+
+
+Average Recall value at 20 :0.96
+Average Precision value at 20 :0.24
+***********************************************
+Recall at 30 for Query:abhishek_bachchan_daughter is:1.0
+Precision at 30 for Query:abhishek_bachchan_daughter is:0.16666666666666666
+
+Recall at 30 for Query:ball_reason_cricket is:1.0
+Precision at 30 for Query:ball_reason_cricket is:0.16666666666666666
+
+Recall at 30 for Query:free_horoscop_daili is:1.0
+Precision at 30 for Query:free_horoscop_daili is:0.16666666666666666
+
+Recall at 30 for Query:hrithik_movi_releas_date is:1.0
+Precision at 30 for Query:hrithik_movi_releas_date is:0.16666666666666666
+
+Recall at 30 for Query:icc_cricket_world_cup is:1.0
+Precision at 30 for Query:icc_cricket_world_cup is:0.16666666666666666
+
+Recall at 30 for Query:palmistri is:1.0
+Precision at 30 for Query:palmistri is:0.16666666666666666
+
+Recall at 30 for Query:powerplai_rule_odi_cricket is:0.8
+Precision at 30 for Query:powerplai_rule_odi_cricket is:0.13333333333333333
+
+Recall at 30 for Query:salman_khan_person_life is:1.0
+Precision at 30 for Query:salman_khan_person_life is:0.16666666666666666
+
+Recall at 30 for Query:shikhar_dhawan is:0.8
+Precision at 30 for Query:shikhar_dhawan is:0.13333333333333333
+
+Recall at 30 for Query:stone_success_studi is:1.0
+Precision at 30 for Query:stone_success_studi is:0.16666666666666666
+
+
+Average Recall value at 30 :0.96
+Average Precision value at 30 :0.16
+***********************************************
+Recall at 40 for Query:abhishek_bachchan_daughter is:1.0
+Precision at 40 for Query:abhishek_bachchan_daughter is:0.125
+
+Recall at 40 for Query:ball_reason_cricket is:1.0
+Precision at 40 for Query:ball_reason_cricket is:0.125
+
+Recall at 40 for Query:free_horoscop_daili is:1.0
+Precision at 40 for Query:free_horoscop_daili is:0.125
+
+Recall at 40 for Query:hrithik_movi_releas_date is:1.0
+Precision at 40 for Query:hrithik_movi_releas_date is:0.125
+
+Recall at 40 for Query:icc_cricket_world_cup is:1.0
+Precision at 40 for Query:icc_cricket_world_cup is:0.125
+
+Recall at 40 for Query:palmistri is:1.0
+Precision at 40 for Query:palmistri is:0.125
+
+Recall at 40 for Query:powerplai_rule_odi_cricket is:0.8
+Precision at 40 for Query:powerplai_rule_odi_cricket is:0.1
+
+Recall at 40 for Query:salman_khan_person_life is:1.0
+Precision at 40 for Query:salman_khan_person_life is:0.125
+
+Recall at 40 for Query:shikhar_dhawan is:0.8
+Precision at 40 for Query:shikhar_dhawan is:0.1
+
+Recall at 40 for Query:stone_success_studi is:1.0
+Precision at 40 for Query:stone_success_studi is:0.125
+
+
+Average Recall value at 40 :0.96
+Average Precision value at 40 :0.12
+***********************************************
+Recall at 50 for Query:abhishek_bachchan_daughter is:1.0
+Precision at 50 for Query:abhishek_bachchan_daughter is:0.1
+
+Recall at 50 for Query:ball_reason_cricket is:1.0
+Precision at 50 for Query:ball_reason_cricket is:0.1
+
+Recall at 50 for Query:free_horoscop_daili is:1.0
+Precision at 50 for Query:free_horoscop_daili is:0.1
+
+Recall at 50 for Query:hrithik_movi_releas_date is:1.0
+Precision at 50 for Query:hrithik_movi_releas_date is:0.1
+
+Recall at 50 for Query:icc_cricket_world_cup is:1.0
+Precision at 50 for Query:icc_cricket_world_cup is:0.1
+
+Recall at 50 for Query:palmistri is:1.0
+Precision at 50 for Query:palmistri is:0.1
+
+Recall at 50 for Query:powerplai_rule_odi_cricket is:0.8
+Precision at 50 for Query:powerplai_rule_odi_cricket is:0.08
+
+Recall at 50 for Query:salman_khan_person_life is:1.0
+Precision at 50 for Query:salman_khan_person_life is:0.1
+
+Recall at 50 for Query:shikhar_dhawan is:0.8
+Precision at 50 for Query:shikhar_dhawan is:0.08
+
+Recall at 50 for Query:stone_success_studi is:1.0
+Precision at 50 for Query:stone_success_studi is:0.1
+
+
+Average Recall value at 50 :0.96
+Average Precision value at 50 :0.09599999999999999
+***********************************************

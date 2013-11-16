@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,53 +33,181 @@ public class EngineEvaluator {
 	// Holds all the system properties
 	private Configurator m_configurator = null;
 
-	List<QueryResult> m_qResults = null;
-	
+	private Map<Query, QueryResult> m_ourSystemResults = null;
+
+	private Map<Query, QueryResult> m_benchMarked_Results = null;
+
 	private Map<String, Term> m_termMap = null;
 
-	public EngineEvaluator(Configurator p_configurator, Map<String, Term> termMap) {
+	public EngineEvaluator(Configurator p_configurator,
+			Map<String, Term> termMap) {
 		m_configurator = p_configurator;
 		m_termMap = termMap;
 	}
 
-	public double calculateRecall(int rANK_LEVELS2, QueryResult qResult) {
-		Map<String,Double> fileRSVMap = qResult.getFileRSVMap();
-		Set<Entry<String,Double>> entrySet = fileRSVMap.entrySet();
+	public void evaluate() {
+		// Read stemmed queries
+		List<String> queries = readQueries();
+		// Generate RSV values using our system
+		generateQueryResults(queries);
+
+		PrintWriter xEvaluationResultWriter = null;
+		try {
+			xEvaluationResultWriter = new PrintWriter(new File(
+					m_configurator.get_evaluation_result_file_path()));
+			m_benchMarked_Results = readQueryResult(m_configurator
+					.get_bench_marked_query_results_dir());
+			m_ourSystemResults = readQueryResult(m_configurator
+					.get_eval_gen_query_output_dir());
+
+			findEvaluationMeasures(m_ourSystemResults,
+					"Values for the system we developed",
+					xEvaluationResultWriter);
+			xEvaluationResultWriter.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (xEvaluationResultWriter != null) {
+				xEvaluationResultWriter.close();
+			}
+		}
+	}
+
+	public void findEvaluationMeasures(Map<Query, QueryResult> queryResultMap,
+			String strToBePrinted, PrintWriter xEvaluationResultWriter) {
+		Set<Entry<Query, QueryResult>> queryResultEntrySet = queryResultMap
+				.entrySet();
+		Iterator<Entry<Query, QueryResult>> queryResultItr = queryResultEntrySet
+				.iterator();
+		double recall = 0;
+		double precision = 0;
+		double r = 0;
+		double p = 0;
+		Entry<Query, QueryResult> tempRes = null;
+		for (int i = 0; i < RANK_LEVELS.length; i++) {
+			while (queryResultItr.hasNext()) {
+				tempRes = queryResultItr.next();
+				r = calculateRecall(RANK_LEVELS[i], tempRes.getValue());
+				xEvaluationResultWriter.println("Recall at "+RANK_LEVELS[i] + " for Query:"+tempRes.getKey().getQueryName() +" is:"+r);
+				recall += r;
+				p = calculatePrecision(RANK_LEVELS[i],
+						tempRes.getValue());
+				xEvaluationResultWriter.println("Precision at "+RANK_LEVELS[i] + " for Query:"+tempRes.getKey().getQueryName()+" is:"+p);
+				xEvaluationResultWriter.println("");
+				precision += p;
+			}
+			xEvaluationResultWriter.println("");
+			xEvaluationResultWriter.println("Average Recall value at " +RANK_LEVELS[i]+" :"
+					+ (recall / (double) queryResultMap.size()));
+			xEvaluationResultWriter.println("Average Precision value at " +RANK_LEVELS[i]+" :"
+					+ (precision / (double) queryResultMap.size()));
+			xEvaluationResultWriter.println("***********************************************");
+			xEvaluationResultWriter.flush();
+			recall = 0;
+			precision = 0;
+			queryResultItr = queryResultEntrySet
+					.iterator();
+		}
+	}
+
+	public void calcualteAverageValues(double[][] recallValues,
+			double[][] precisionValues, PrintWriter xEvaluationResultWriter,
+			int querySetSize) {
+		for (int i = 0; i < querySetSize; i++) {
+			for (int j = 0; j < RANK_LEVELS.length; j++) {
+				xEvaluationResultWriter.format(
+						"Average Precision at RANK %d is %.4f\n",
+						RANK_LEVELS[i],
+						findAverage(precisionValues[i], RANK_LEVELS.length));
+				xEvaluationResultWriter.format(
+						"Average Recall at RANK %d is %.4f\n", RANK_LEVELS[i],
+						findAverage(recallValues[i], RANK_LEVELS.length));
+			}
+		}
+	}
+
+	public double calculateRecall(int rankLevel, QueryResult qResult) {
+		Map<String, Double> fileRSVMap = qResult.getFileRSVMap();
+		Set<Entry<String, Double>> entrySet = fileRSVMap.entrySet();
 		Iterator<Entry<String, Double>> entrySetItr = entrySet.iterator();
 		double recall = 0;
-		int count =1;
-		int relavantDocCountTillRank = 0;
-		int totalRelvantDocCount = 0;
-		while(entrySetItr.hasNext()){
-			Entry<String,Double> entry = entrySetItr.next();
-			if(entry.getValue()!=0){
-				++totalRelvantDocCount;
-				if(count<=rANK_LEVELS2)
-					++relavantDocCountTillRank;
+		int count = 1;
+		List<String> ourSystemsRelvantDocuments = new ArrayList<String>();
+		while (entrySetItr.hasNext()) {
+			Entry<String, Double> entry = entrySetItr.next();
+			if (entry.getValue() != 0) {
+				ourSystemsRelvantDocuments.add(entry.getKey());
+				if (count > rankLevel)
+					break;
 			}
 			count++;
 		}
-		recall =  (relavantDocCountTillRank/(double)totalRelvantDocCount);
+		System.out.println("Our system relvant document:"
+				+ ourSystemsRelvantDocuments);
+		QueryResult benchMarkedResult = m_benchMarked_Results.get(qResult
+				.getQuery());
+		List<String> benchMarkedRelvantDocuments = getRelevantDocuements(
+				benchMarkedResult, rankLevel);
+		int relvanceMatchCount = 0;
+		Iterator<String> itr = ourSystemsRelvantDocuments.iterator();
+		while (itr.hasNext()) {
+			if (benchMarkedRelvantDocuments.contains(itr.next()))
+				relvanceMatchCount++;
+		}
+		System.out.println("Bench marked count:"
+				+ benchMarkedResult.getTotalRelevantCount());
+		recall = (relvanceMatchCount / (double) benchMarkedResult
+				.getTotalRelevantCount());
+		System.out.println("Recall for :" + qResult.getQuery().getQueryName()
+				+ " at level" + rankLevel + " is:" + recall);
 		return recall;
 	}
 
-	public double calculatePrecision(int rANK_LEVELS2, QueryResult qResult) {
-		Map<String,Double> fileRSVMap = qResult.getFileRSVMap();
-		Set<Entry<String,Double>> entrySet = fileRSVMap.entrySet();
+	private List<String> getRelevantDocuements(QueryResult benchMarkedResult,
+			int rankLevel) {
+		List<String> relvantDocuments = new ArrayList<String>();
+
+		Iterator<String> itr = benchMarkedResult.getRelevantDocsList()
+				.iterator();
+		int count = 0;
+		while (count < rankLevel && itr.hasNext()) {
+			relvantDocuments.add(itr.next());
+		}
+		return relvantDocuments;
+	}
+
+	public double calculatePrecision(int rankLevel, QueryResult qResult) {
+		Map<String, Double> fileRSVMap = qResult.getFileRSVMap();
+		Set<Entry<String, Double>> entrySet = fileRSVMap.entrySet();
 		Iterator<Entry<String, Double>> entrySetItr = entrySet.iterator();
 		double precision = 0;
-		int count =1;
-		int relavantDocCountTillRank = 0;
-		while(entrySetItr.hasNext()){
-			Entry<String,Double> entry = entrySetItr.next();
-			if(entry.getValue()!=0){
-				++relavantDocCountTillRank;
+		int count = 1;
+		List<String> ourSystemsRelvantDocuments = new ArrayList<String>();
+		while (entrySetItr.hasNext()) {
+			Entry<String, Double> entry = entrySetItr.next();
+			if (entry.getValue() != 0) {
+				ourSystemsRelvantDocuments.add(entry.getKey());
+				if (count >= rankLevel)
+					break;
 			}
-			if(count==rANK_LEVELS2)
-				break;
 			count++;
 		}
-		precision= (relavantDocCountTillRank/(double)rANK_LEVELS2);
+
+		QueryResult benchMarkedResult = m_benchMarked_Results.get(qResult
+				.getQuery());
+		List<String> benchMarkedRelvantDocuments = getRelevantDocuements(
+				benchMarkedResult, rankLevel);
+		int relvanceMatchCount = 0;
+		Iterator<String> itr = ourSystemsRelvantDocuments.iterator();
+		while (itr.hasNext()) {
+			if (benchMarkedRelvantDocuments.contains(itr.next()))
+				relvanceMatchCount++;
+		}
+		precision = (relvanceMatchCount / (double) rankLevel);
+		System.out.println("Precision for :"
+				+ qResult.getQuery().getQueryName() + " at level" + rankLevel
+				+ " is:" + precision);
 		return precision;
 	}
 
@@ -88,79 +217,29 @@ public class EngineEvaluator {
 		List<String> queryList = new ArrayList<String>();
 		File f = new File(m_configurator.get_given_queries_file_path());
 		try {
-			xCurrentDocReader = new BufferedReader(new FileReader(
-					f));
-			while((xCurrLineInDoc = xCurrentDocReader.readLine())!=null){
+			xCurrentDocReader = new BufferedReader(new FileReader(f));
+			while ((xCurrLineInDoc = xCurrentDocReader.readLine()) != null) {
 				queryList.add(xCurrLineInDoc);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}finally{
-			if(xCurrentDocReader!=null)
+		} finally {
+			if (xCurrentDocReader != null)
 				try {
 					xCurrentDocReader.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 		}
-		
+
 		return queryList;
 	}
 
-	public void evaluate() {
-		List<String> queries = readQueries();
-		generateQueryResults(queries);
-		m_qResults = readQueryResult();
-		int querySetSize = m_qResults.size();
-		double[][] precisionValues = new double[RANK_LEVELS.length][querySetSize];
-		double[][] recallValues = new double[RANK_LEVELS.length][querySetSize];
-
-		Iterator<QueryResult> queryResultItr = m_qResults.iterator();
-		int queryCount = 0;
-		for (int i = 0; i < RANK_LEVELS.length; i++) {
-			while (queryResultItr.hasNext()) {
-				QueryResult tempRes = queryResultItr.next();
-				recallValues[i][queryCount] =
-							calculateRecall(
-						RANK_LEVELS[i],tempRes );
-				precisionValues[i][queryCount] = 
-						calculatePrecision(
-						RANK_LEVELS[i], tempRes);
-				queryCount++;
-			}
-			//Reset 
-			queryCount = 0;
-			queryResultItr = m_qResults.iterator();
-		}
-
-		PrintWriter xEvaluationResultWriter = null;
-		try {
-			xEvaluationResultWriter = new PrintWriter(new File(m_configurator.get_evaluation_result_file_path()));
-			for (int i = 0; i < RANK_LEVELS.length; i++) {
-				xEvaluationResultWriter.println("***********************************");
-				xEvaluationResultWriter.format("Average Precision at RANK %d is %.4f\n"
-								,RANK_LEVELS[i]
-								,findAverage(precisionValues[i],
-										querySetSize));
-				xEvaluationResultWriter.format("Average Recall at RANK %d is %.4f\n"
-								,RANK_LEVELS[i]
-								,findAverage(recallValues[i], querySetSize));
-				xEvaluationResultWriter.println("***********************************");
-			}
-		} catch (FileNotFoundException e) {
-			m_logger.error("FileNotFoundException",e);
-		}finally{
-			if(xEvaluationResultWriter!=null){
-				xEvaluationResultWriter.close();
-			}
-		}
-		
-	}
-
 	private void generateQueryResults(List<String> queries) {
-		SearchFiles searchFiles = new SearchFiles(m_configurator, m_termMap,true);
+		SearchFiles searchFiles = new SearchFiles(m_configurator, m_termMap,
+				true);
 		Iterator<String> queryItr = queries.iterator();
-		while(queryItr.hasNext()){
+		while (queryItr.hasNext()) {
 			searchFiles.findRSV(queryItr.next());
 		}
 	}
@@ -170,32 +249,39 @@ public class EngineEvaluator {
 		for (double d : ds) {
 			sum = sum + d;
 		}
-		return (sum/(double)querySetSize);
+		return (sum / (double) RANK_LEVELS.length);
 	}
 
-	public List<QueryResult> readQueryResult() {
-		File[] qResultFiles = MyUtilities.getDocumentList(m_configurator
-				.get_eval_gen_query_output_dir());
+	public Map<Query, QueryResult> readQueryResult(String queryResultDirPath) {
+		File[] qResultFiles = MyUtilities.getDocumentList(queryResultDirPath);
 		BufferedReader xCurrentDocReader = null;
-		List<QueryResult> qrList = new ArrayList<QueryResult>();
 		String xCurrLineInDoc = null;
+		Map<Query, QueryResult> queryResultMap = new LinkedHashMap<Query, QueryResult>();
+		int relvantCount = 0;
 		for (File xCurrentQueryResultFile : qResultFiles) {
 			try {
+				relvantCount = 0;
 				xCurrentDocReader = new BufferedReader(new FileReader(
 						xCurrentQueryResultFile));
 				xCurrLineInDoc = xCurrentDocReader.readLine();
 				String[] queryTerms = xCurrLineInDoc.split("[\\s]");
 				Query q = new Query();
+				q.setQueryName(MyUtilities.getQueryName(queryTerms));
 				q.setQueryStringList(Arrays.asList(queryTerms));
 				QueryResult queryReslult = new QueryResult();
 				queryReslult.setQuery(q);
 				while ((xCurrLineInDoc = xCurrentDocReader.readLine()) != null) {
 					String[] parsedStrings = xCurrLineInDoc.split("[\\s]");
-					//System.out.println(parsedStrings[0] +"--"+parsedStrings[1]);
-					queryReslult.getFileRSVMap().put(parsedStrings[0],
-					Double.parseDouble(parsedStrings[1]));
+					String docName = parsedStrings[0];
+					double rsvValue = Double.parseDouble(parsedStrings[1]);
+					queryReslult.getFileRSVMap().put(docName, rsvValue);
+					if (rsvValue != 0) {
+						relvantCount++;
+						queryReslult.getRelevantDocsList().add(docName);
+					}
 				}
-				qrList.add(queryReslult);
+				queryReslult.setTotalRelevantCount(relvantCount);
+				queryResultMap.put(q, queryReslult);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -210,6 +296,6 @@ public class EngineEvaluator {
 					}
 			}
 		}
-		return qrList;
+		return queryResultMap;
 	}
 }

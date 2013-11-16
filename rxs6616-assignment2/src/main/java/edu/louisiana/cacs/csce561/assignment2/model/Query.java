@@ -34,4 +34,32 @@ public class Query {
 	public void setQeuryVector(double[] qeuryVector) {
 		this.qeuryVector = qeuryVector;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((queryName == null) ? 0 : queryName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Query other = (Query) obj;
+		if (queryName == null) {
+			if (other.queryName != null)
+				return false;
+		} else if (!queryName.equals(other.queryName))
+			return false;
+		return true;
+	}
+	
+	
 }

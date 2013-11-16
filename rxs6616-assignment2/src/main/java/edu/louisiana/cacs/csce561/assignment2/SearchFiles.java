@@ -56,7 +56,7 @@ public class SearchFiles {
 		queryVector = getQueryVector(searchQuery);
 		for (File f : x_DocFiles) {
 			docVector = getDocumentVector(docIndex);
-			rsvMap.put(MyUtilities.getDocNameFromFileName(f.getName()),
+			rsvMap.put(MyUtilities.getDocNameFromFileName(f.getName())+".txt",
 							findRsv(docVector, queryVector));
 			docIndex++;
 		}
@@ -76,13 +76,13 @@ public class SearchFiles {
 			
 			xRSVValuePrinter = new PrintWriter(f);
 			xRSVValuePrinter.println(searchQuery);
-			if(m_isEvaluator){
+			/*if(m_isEvaluator){
 				 termSet = rsvMap.entrySet(); 
-			}else{
+			}else{*/
 				sortedRSVMap = new TreeMap<String, Double>();
 				sortedRSVMap = MyUtilities.sortByValues(rsvMap);
 				 termSet = sortedRSVMap.entrySet();
-			}
+			//}
 			
 			Iterator<Entry<String, Double>> termItr = termSet.iterator();
 			while (termItr.hasNext()) {

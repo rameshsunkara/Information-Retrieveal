@@ -113,4 +113,18 @@ public class MyUtilities {
 		fileName = fileName+"results";
 		return fileName;
 	}
+
+	public static String getQueryName(String[] queryTerms) {
+		String queryName = "";
+		for(int i=0;i<queryTerms.length;i++){
+			queryName += queryTerms[i]+"_";
+		}
+		queryName = queryName.substring(0, queryName.lastIndexOf("_"));
+		return queryName;
+	}
+	
+	public static void main(String []args){
+		String[] q = {"ra","me","sh"};
+		System.out.println(getQueryName(q));
+	}
 }

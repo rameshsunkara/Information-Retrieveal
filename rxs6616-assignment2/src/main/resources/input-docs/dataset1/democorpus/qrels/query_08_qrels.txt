@@ -1,4 +1,4 @@
-palmistry	
+palmistri	
 doc_01.txt	0
 doc_02.txt	0
 doc_03.txt	0

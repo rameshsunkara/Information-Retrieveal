@@ -65,7 +65,7 @@ public class Configurator {
 				+ "stemmed_corpus";
 	}
 	
-	public String get_query_result_dir() {
+	public String get_bench_marked_query_results_dir() {
 		return get_current_dataset_path() 
 				+ File.separator
 				+ m_configFile.getProperty("QUERY_RESULT_DIR");
